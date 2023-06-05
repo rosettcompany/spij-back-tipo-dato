@@ -7,4 +7,5 @@ import pe.gob.minjus.spij.back.tipo.dato.entity.AgrupamientoNormaEntity;
 public interface IAgrupamientoNormaService {
 	public List<AgrupamientoNormaEntity> findAll();
 	public List<AgrupamientoNormaEntity> listaTipoNorma();
+	public List<AgrupamientoNormaEntity> listaJurisprudencia();
 }

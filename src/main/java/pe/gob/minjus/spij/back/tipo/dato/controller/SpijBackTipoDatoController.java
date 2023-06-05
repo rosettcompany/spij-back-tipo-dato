@@ -24,9 +24,16 @@ public class SpijBackTipoDatoController {
 	@Autowired
 	private IAgrupamientoNormaService agrupamientoNormaService;
 
-	@RequestMapping(value = "/lista-agrupamiento-norma", method = RequestMethod.GET)
+	@RequestMapping(value = "/lista-normas", method = RequestMethod.GET)
 	public ResponseEntity<List<AgrupamientoNormaEntity>> getAgrupamientoNorma() throws Exception {
 		List<AgrupamientoNormaEntity> data = agrupamientoNormaService.listaTipoNorma();
+		return ResponseEntity.ok(data);
+
+	}
+	
+	@RequestMapping(value = "/lista-jurisprudencias", method = RequestMethod.GET)
+	public ResponseEntity<List<AgrupamientoNormaEntity>> getJurisprudencias() throws Exception {
+		List<AgrupamientoNormaEntity> data = agrupamientoNormaService.listaJurisprudencia();
 		return ResponseEntity.ok(data);
 
 	}

@@ -18,5 +18,9 @@ public interface IAgrupamientoNormaRepository extends CrudRepository<Agrupamient
 	        "ORDER BY spij_ext_agrupamiento_norma.nombre ASC", nativeQuery = true)
 	List<AgrupamientoNormaEntity> listaTipoNorma();
 
+	@Query(value = "SELECT * FROM spij_ext_agrupamiento_norma " + 
+	        "WHERE spij_ext_agrupamiento_norma.grupo = 8 " +
+	        "ORDER BY spij_ext_agrupamiento_norma.nombre ASC", nativeQuery = true)
+	List<AgrupamientoNormaEntity> listaJurisprudencia();
 
 }

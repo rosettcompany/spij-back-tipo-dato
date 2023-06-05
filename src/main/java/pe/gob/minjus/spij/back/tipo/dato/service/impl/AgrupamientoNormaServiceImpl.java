@@ -27,5 +27,8 @@ public class AgrupamientoNormaServiceImpl implements IAgrupamientoNormaService {
 		return (List<AgrupamientoNormaEntity>) iAgrupamientoNormaRepository.listaTipoNorma();
 	}
 	
-
+	@Override
+	public List<AgrupamientoNormaEntity> listaJurisprudencia() {
+		return (List<AgrupamientoNormaEntity>) iAgrupamientoNormaRepository.listaJurisprudencia();
+	}
 }
