@@ -1,6 +1,7 @@
 package pe.gob.minjus.spij.back.tipo.dato.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
@@ -22,5 +23,9 @@ public interface IAgrupamientoNormaRepository extends CrudRepository<Agrupamient
 	        "WHERE spij_ext_agrupamiento_norma.grupo = 8 " +
 	        "ORDER BY spij_ext_agrupamiento_norma.nombre ASC", nativeQuery = true)
 	List<AgrupamientoNormaEntity> listaJurisprudencia();
+	
+	@Query(value = "SELECT * FROM spij_ext_agrupamiento_norma " + 
+	        "WHERE spij_ext_agrupamiento_norma.nombre LIKE %?1% and spij_ext_agrupamiento_norma.grupo LIKE %?2%", nativeQuery = true)
+	Optional<AgrupamientoNormaEntity>ConsultarPorNombre(String nombreAnterior, int grupo);
 
 }

@@ -2,17 +2,20 @@ package pe.gob.minjus.spij.back.tipo.dato.controller;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import pe.gob.minjus.spij.back.tipo.dato.entity.AgrupamientoNormaEntity;
+import pe.gob.minjus.spij.back.tipo.dato.entity.NormaActualizar;
 import pe.gob.minjus.spij.back.tipo.dato.entity.NormaRequest;
 import pe.gob.minjus.spij.back.tipo.dato.service.IAgrupamientoNormaService;
 
@@ -72,7 +75,34 @@ public class SpijBackTipoDatoController {
 		System.out.println("norma grupo: " + norma.grupo);
 
 		agrupamientoNormaService.Guardar(norma);
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>("Registro exitoso",HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/norma/actualizar", method = RequestMethod.POST)
+	public ResponseEntity<?> actualizarNormas(@RequestBody NormaActualizar norma) throws ParseException {
+
+		String nombreAnterior= norma.nombreAnterior.toUpperCase();
+		String nombreNuevo= norma.nombreNuevo.toUpperCase();
+		Optional<AgrupamientoNormaEntity> data = agrupamientoNormaService.ConsultarPorNombre(nombreAnterior, norma.grupo);
+		if (data.isPresent()) {
+	        AgrupamientoNormaEntity entidad = data.get();
+	        int agrupamiento_id = entidad.getAgrupamiento_id();
+	        entidad.setAgrupamiento_id(agrupamiento_id);
+	        entidad.setNombre(nombreNuevo);
+	        int grupoNorma = entidad.getGrupo();
+	        entidad.setGrupo(grupoNorma);
+	        
+
+	        System.out.println("ID: " + entidad.getAgrupamiento_id());
+	        System.out.println("Nombre: " + entidad.getNombre());
+	        System.out.println("Grupo: " + entidad.getGrupo());
+	        
+	        agrupamientoNormaService.Guardar(entidad);
+	    } else {
+	    	return ResponseEntity.badRequest().body("ERROR: No se encontró la norma con el nombre y/o grupo especificado.");
+	    }
+		
+		return new ResponseEntity<>("Actualización exitosa.",HttpStatus.OK);
 	}
 
 }
