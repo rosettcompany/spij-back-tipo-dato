@@ -15,7 +15,7 @@ import pe.gob.minjus.spij.back.tipo.dato.entity.AgrupamientoNormaEntity;
 public interface IAgrupamientoNormaRepository extends CrudRepository<AgrupamientoNormaEntity, Integer>{ 
 	// Aqui se pueden crear otros metodos
 	@Query(value = "SELECT * FROM spij_ext_agrupamiento_norma " + 
-	        "WHERE spij_ext_agrupamiento_norma.grupo = 1 " +
+	        "WHERE spij_ext_agrupamiento_norma.grupo != 8 " +
 	        "ORDER BY spij_ext_agrupamiento_norma.nombre ASC", nativeQuery = true)
 	List<AgrupamientoNormaEntity> listaTipoNorma();
 

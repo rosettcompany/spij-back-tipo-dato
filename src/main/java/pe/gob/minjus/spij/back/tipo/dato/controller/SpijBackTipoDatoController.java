@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import pe.gob.minjus.spij.back.tipo.dato.entity.AgrupamientoNormaEntity;
 import pe.gob.minjus.spij.back.tipo.dato.entity.NormaActualizar;
 import pe.gob.minjus.spij.back.tipo.dato.entity.NormaRequest;
+import pe.gob.minjus.spij.back.tipo.dato.entity.SectorComboEntity;
 import pe.gob.minjus.spij.back.tipo.dato.service.IAgrupamientoNormaService;
+import pe.gob.minjus.spij.back.tipo.dato.service.ISectorComboService;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -26,8 +28,11 @@ public class SpijBackTipoDatoController {
 
 	@Autowired
 	private IAgrupamientoNormaService agrupamientoNormaService;
+	
+	@Autowired
+	private ISectorComboService sectorComboService;
 
-	@RequestMapping(value = "/listar", method = RequestMethod.GET)
+	@RequestMapping(value = "/listar-normar-y-jurisprudencia", method = RequestMethod.GET)
 	public ResponseEntity<List<AgrupamientoNormaEntity>> getTodo() throws Exception {
 		List<AgrupamientoNormaEntity> data = agrupamientoNormaService.findAll();
 		return ResponseEntity.ok(data);
@@ -105,4 +110,9 @@ public class SpijBackTipoDatoController {
 		return new ResponseEntity<>("Actualización exitosa.",HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/listar-sector-padre-hijo", method = RequestMethod.GET)
+	public ResponseEntity<List<SectorComboEntity>> getSectores() throws Exception {
+		List<SectorComboEntity> data = sectorComboService.findAll();
+		return ResponseEntity.ok(data);
+	}
 }
