@@ -31,4 +31,11 @@ public class AgrupamientoNormaServiceImpl implements IAgrupamientoNormaService {
 	public List<AgrupamientoNormaEntity> listaJurisprudencia() {
 		return (List<AgrupamientoNormaEntity>) iAgrupamientoNormaRepository.listaJurisprudencia();
 	}
+
+
+	@Override
+	public void Guardar(AgrupamientoNormaEntity agrupamientoNormaEntity) {
+		iAgrupamientoNormaRepository.save(agrupamientoNormaEntity);
+		
+	}
 }
