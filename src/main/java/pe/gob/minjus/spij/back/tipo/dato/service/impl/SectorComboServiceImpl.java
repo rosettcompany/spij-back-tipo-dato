@@ -21,12 +21,16 @@ public class SectorComboServiceImpl implements ISectorComboService {
 	public List<SectorComboEntity> findAll() {
 		return (List<SectorComboEntity>) iSectorComboRepository.findAll();
 	}
-//
-//
-//	@Override
-//	public List<AgrupamientoNormaEntity> listaTipoNorma() {
-//		return (List<AgrupamientoNormaEntity>) iAgrupamientoNormaRepository.listaTipoNorma();
-//	}
+
+	@Override
+	public List<SectorComboEntity> listaSectorPadre() {
+		return (List<SectorComboEntity>) iSectorComboRepository.listaSectorPadre();
+	}
+	
+	@Override
+	public List<SectorComboEntity> listaSectorHijo() {
+		return (List<SectorComboEntity>) iSectorComboRepository.listaSectorHijo();
+	}
 //	
 //	@Override
 //	public List<AgrupamientoNormaEntity> listaJurisprudencia() {

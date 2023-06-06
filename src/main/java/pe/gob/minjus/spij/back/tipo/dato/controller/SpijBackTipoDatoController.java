@@ -115,4 +115,16 @@ public class SpijBackTipoDatoController {
 		List<SectorComboEntity> data = sectorComboService.findAll();
 		return ResponseEntity.ok(data);
 	}
+	
+	@RequestMapping(value = "/listar-sector-padre", method = RequestMethod.GET)
+	public ResponseEntity<List<SectorComboEntity>> getSectorPadre() throws Exception {
+		List<SectorComboEntity> data = sectorComboService.listaSectorPadre();
+		return ResponseEntity.ok(data);
+	}
+	
+	@RequestMapping(value = "/listar-sector-hijo", method = RequestMethod.GET)
+	public ResponseEntity<List<SectorComboEntity>> getSectorHijo() throws Exception {
+		List<SectorComboEntity> data = sectorComboService.listaSectorHijo();
+		return ResponseEntity.ok(data);
+	}
 }
