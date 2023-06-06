@@ -127,4 +127,41 @@ public class SpijBackTipoDatoController {
 		List<SectorComboEntity> data = sectorComboService.listaSectorHijo();
 		return ResponseEntity.ok(data);
 	}
+	
+	@RequestMapping(value = "/sector-padre/insertar", method = RequestMethod.POST)
+	public ResponseEntity<?> insertarSectorPadre(@RequestBody SectorComboEntity sectorPadre) throws ParseException {
+
+		List<SectorComboEntity> data = sectorComboService.findAll();
+		System.out.println("data.size: " + data.size());
+		int lastIndex = data.size() - 1;
+		SectorComboEntity lastEntity = data.get(lastIndex);
+		int sector_combo_id = lastEntity.getSector_combo_id() + 1;
+		System.out.println("lastEntity: " + sector_combo_id);
+
+		SectorComboEntity padre = new SectorComboEntity();
+		padre.setSector_combo_id(sector_combo_id);
+		padre.setNombre(sectorPadre.nombre.toUpperCase());
+		padre.setEs_padre(sectorPadre.es_padre);
+		padre.setPadre_nombre(sectorPadre.padre_nombre.toUpperCase());
+
+		int grupo = sectorPadre.grupo;
+		if (grupo >= 1 && grupo <= 8) {
+			if (grupo == 5) {
+				grupo = 6;
+			}
+			padre.setGrupo(grupo);
+		} else {
+			return ResponseEntity.badRequest().body("ERROR: El grupo ingresado no está asociado a una agrupación válida.");
+		}
+
+		System.out.println("padre: " + padre);
+		System.out.println("padre sector_combo_id: " + padre.sector_combo_id);
+		System.out.println("padre nombre: " + padre.nombre);
+		System.out.println("padre es_padre: " + padre.es_padre);
+		System.out.println("padre padre_nombre: " + padre.padre_nombre);
+		System.out.println("padre grupo: " + padre.grupo);
+
+		sectorComboService.Guardar(padre);
+		return new ResponseEntity<>("Registro exitoso",HttpStatus.OK);
+	}
 }

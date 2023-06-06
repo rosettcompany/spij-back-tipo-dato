@@ -43,11 +43,11 @@ public class SectorComboServiceImpl implements ISectorComboService {
 //	}
 //
 //
-//	@Override
-//	public void Guardar(AgrupamientoNormaEntity agrupamientoNormaEntity) {
-//		iAgrupamientoNormaRepository.save(agrupamientoNormaEntity);
-//		
-//	}
+	@Override
+	public void Guardar(SectorComboEntity sectorComboEntity) {
+		iSectorComboRepository.save(sectorComboEntity);
+		
+	}
 //
 //
 //	@Override

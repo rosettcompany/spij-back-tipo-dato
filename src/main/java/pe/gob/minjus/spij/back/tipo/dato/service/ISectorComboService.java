@@ -14,5 +14,5 @@ public interface ISectorComboService {
 //	public List<AgrupamientoNormaEntity> listaJurisprudencia();
 //	public Optional<AgrupamientoNormaEntity> ConsultarPorNombre(String nombreAnterior, int grupo);
 //	public Optional<AgrupamientoNormaEntity> ConsultarId(int id);
-//	public void Guardar(AgrupamientoNormaEntity agrupamientoNormaEntity);
+	public void Guardar(SectorComboEntity sectorComboEntity);
 }
