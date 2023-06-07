@@ -93,4 +93,13 @@ public class SectorComboEntity {
 		this.grupo = grupo;
 	}
 
+	@Override
+	public String toString() {
+		return "SectorComboEntity [sector_combo_id=" + sector_combo_id + ", nombre=" + nombre + ", es_padre=" + es_padre
+				+ ", padre_nombre=" + padre_nombre + ", grupo=" + grupo + "]";
+	}
+	
+	
+
+
 }

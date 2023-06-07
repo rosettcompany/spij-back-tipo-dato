@@ -31,11 +31,11 @@ public class SectorComboServiceImpl implements ISectorComboService {
 	public List<SectorComboEntity> listaSectorHijo() {
 		return (List<SectorComboEntity>) iSectorComboRepository.listaSectorHijo();
 	}
-//	
-//	@Override
-//	public List<AgrupamientoNormaEntity> listaJurisprudencia() {
-//		return (List<AgrupamientoNormaEntity>) iAgrupamientoNormaRepository.listaJurisprudencia();
-//	}
+	
+	@Override
+	public List<SectorComboEntity> listaSectorHijoPorPadre(String nombreAnterior, int grupo){
+		return (List<SectorComboEntity>) iSectorComboRepository.listaSectorHijoPorPadre(nombreAnterior, grupo);
+	}
 //	
 //	@Override
 //	public Optional<AgrupamientoNormaEntity> ConsultarId(int id) {
@@ -48,13 +48,15 @@ public class SectorComboServiceImpl implements ISectorComboService {
 		iSectorComboRepository.save(sectorComboEntity);
 		
 	}
-//
-//
-//	@Override
-//	public Optional<AgrupamientoNormaEntity> ConsultarPorNombre(String nombreAnterior, int grupo) {
-//		return iAgrupamientoNormaRepository.ConsultarPorNombre(nombreAnterior, grupo);
-//	}
 
+	@Override
+	public Optional<SectorComboEntity> ConsultarPorNombre(String nombre) {
+		return iSectorComboRepository.ConsultarPorNombre(nombre);
+	}
 
+	@Override
+	public Optional<SectorComboEntity> ConsultarPorNombreGrupo(String nombreAnterior, int grupo) {
+		return iSectorComboRepository.ConsultarPorNombreGrupo(nombreAnterior, grupo);
+	}
 	
 }
