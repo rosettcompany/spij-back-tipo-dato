@@ -12,11 +12,10 @@ import pe.gob.minjus.spij.back.tipo.dato.service.ISectorComboService;
 
 @Service
 public class SectorComboServiceImpl implements ISectorComboService {
-	
+
 	@Autowired
 	private ISectorComboRepository iSectorComboRepository;
-	
-	
+
 	@Override
 	public List<SectorComboEntity> findAll() {
 		return (List<SectorComboEntity>) iSectorComboRepository.findAll();
@@ -26,37 +25,42 @@ public class SectorComboServiceImpl implements ISectorComboService {
 	public List<SectorComboEntity> listaSectorPadre() {
 		return (List<SectorComboEntity>) iSectorComboRepository.listaSectorPadre();
 	}
-	
+
 	@Override
 	public List<SectorComboEntity> listaSectorHijo() {
 		return (List<SectorComboEntity>) iSectorComboRepository.listaSectorHijo();
 	}
-	
+
 	@Override
-	public List<SectorComboEntity> listaSectorHijoPorPadre(String nombreAnterior, int grupo){
+	public List<SectorComboEntity> listaSectorHijoPorPadre(String nombreAnterior, int grupo) {
 		return (List<SectorComboEntity>) iSectorComboRepository.listaSectorHijoPorPadre(nombreAnterior, grupo);
 	}
-//	
-//	@Override
-//	public Optional<AgrupamientoNormaEntity> ConsultarId(int id) {
-//		return iAgrupamientoNormaRepository.findById(id);
-//	}
-//
-//
+
 	@Override
 	public void Guardar(SectorComboEntity sectorComboEntity) {
 		iSectorComboRepository.save(sectorComboEntity);
-		
+
 	}
 
 	@Override
-	public Optional<SectorComboEntity> ConsultarPorNombre(String nombre) {
-		return iSectorComboRepository.ConsultarPorNombre(nombre);
+	public Optional<SectorComboEntity> ConsultarPadrePorNombre(String nombre) {
+		return iSectorComboRepository.ConsultarPadrePorNombre(nombre);
 	}
 
 	@Override
-	public Optional<SectorComboEntity> ConsultarPorNombreGrupo(String nombreAnterior, int grupo) {
-		return iSectorComboRepository.ConsultarPorNombreGrupo(nombreAnterior, grupo);
+	public Optional<SectorComboEntity> ConsultarHijoPorNombre(String nombre) {
+		return iSectorComboRepository.ConsultarHijoPorNombre(nombre);
 	}
-	
+
+	@Override
+	public Optional<SectorComboEntity> ConsultarPadrePorNombreYGrupo(String nombreAnterior, int grupo) {
+		return iSectorComboRepository.ConsultarPadrePorNombreYGrupo(nombreAnterior, grupo);
+	}
+
+	@Override
+	public Optional<SectorComboEntity> ConsultarHijoPorNombrePadreYGrupo(String nombreAnterior, String padre_nombre,
+			int grupo) {
+		return iSectorComboRepository.ConsultarHijoPorNombrePadreYGrupo(nombreAnterior, padre_nombre, grupo);
+	}
+
 }

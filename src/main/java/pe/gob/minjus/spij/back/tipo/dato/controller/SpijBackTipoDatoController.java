@@ -18,6 +18,7 @@ import pe.gob.minjus.spij.back.tipo.dato.entity.AgrupamientoNormaEntity;
 import pe.gob.minjus.spij.back.tipo.dato.entity.NormaActualizar;
 import pe.gob.minjus.spij.back.tipo.dato.entity.NormaRequest;
 import pe.gob.minjus.spij.back.tipo.dato.entity.SectorComboEntity;
+import pe.gob.minjus.spij.back.tipo.dato.entity.SectorHijoActualizar;
 import pe.gob.minjus.spij.back.tipo.dato.service.IAgrupamientoNormaService;
 import pe.gob.minjus.spij.back.tipo.dato.service.ISectorComboService;
 
@@ -172,7 +173,7 @@ public class SpijBackTipoDatoController {
 	public ResponseEntity<?> insertarSectorHijo(@RequestBody SectorComboEntity sectorHijo) throws ParseException {
 
 		Optional<SectorComboEntity> padre = sectorComboService
-				.ConsultarPorNombre(sectorHijo.padre_nombre.toUpperCase());
+				.ConsultarPadrePorNombre(sectorHijo.padre_nombre.toUpperCase());
 		if (padre.isPresent()) {
 			SectorComboEntity padreEntidad = padre.get();
 			List<SectorComboEntity> data = sectorComboService.findAll();
@@ -204,19 +205,16 @@ public class SpijBackTipoDatoController {
 		String nombreAnterior = norma.nombreAnterior.toUpperCase();
 		String nombreNuevo = norma.nombreNuevo.toUpperCase();
 
-		Optional<SectorComboEntity> data = sectorComboService.ConsultarPorNombreGrupo(nombreAnterior, norma.grupo);
+		Optional<SectorComboEntity> padreB = sectorComboService.ConsultarPadrePorNombreYGrupo(nombreAnterior, norma.grupo);
 		
-		if (data.isPresent()) {
-			SectorComboEntity entidad = data.get();
-			int agrupamiento_id = entidad.getSector_combo_id();
-			entidad.setSector_combo_id(agrupamiento_id);
-			entidad.setNombre(nombreNuevo);
-			int grupoNorma = entidad.getGrupo();
-			entidad.setGrupo(grupoNorma);
-
+		if (padreB.isPresent()) {
+			SectorComboEntity padre = padreB.get();
+			int agrupamiento_id = padre.getSector_combo_id();
+			padre.setSector_combo_id(agrupamiento_id);
+			padre.setNombre(nombreNuevo);
+			int grupoNorma = padre.getGrupo();
+			padre.setGrupo(grupoNorma);
 			
-			System.out.println(nombreAnterior);
-			System.out.println(norma.grupo);
 			// Actualizar nombres de los sectores hijos
 			List<SectorComboEntity> sectoresHijos = sectorComboService.listaSectorHijoPorPadre(nombreAnterior, norma.grupo);
 			System.out.println( sectoresHijos.size());
@@ -226,11 +224,38 @@ public class SpijBackTipoDatoController {
 	            sectorComboService.Guardar(sectorHijo);
 	        }
 	        
-	        sectorComboService.Guardar(entidad);
+	        sectorComboService.Guardar(padre);
 	        
 		} else {
 			return ResponseEntity.badRequest()
 					.body("ERROR: No se encontró el sector padre con el nombre y/o grupo especificado.");
+		}
+
+		return new ResponseEntity<>("Actualización exitosa.", HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/sector-hijo/actualizar", method = RequestMethod.POST)
+	public ResponseEntity<?> actualizarSectorHijo(@RequestBody SectorHijoActualizar hijo) throws ParseException {
+
+		String nombreAnterior = hijo.nombreAnterior.toUpperCase();
+		String nombreNuevo = hijo.nombreNuevo.toUpperCase();
+		String padre_nombre = hijo.padre_nombre.toUpperCase();
+		Optional<SectorComboEntity> data = sectorComboService.ConsultarHijoPorNombrePadreYGrupo(nombreAnterior,padre_nombre,
+				hijo.grupo);
+		if (data.isPresent()) {
+			SectorComboEntity entidad = data.get();
+			entidad.setNombre(nombreNuevo);
+
+			System.out.println("ID: " + entidad.getSector_combo_id());
+			System.out.println("Nombre: " + entidad.getNombre());
+			System.out.println("Es padre: " + entidad.getEs_padre());
+			System.out.println("padre: " + entidad.getPadre_nombre());
+			System.out.println("Grupo: " + entidad.getGrupo());
+
+			sectorComboService.Guardar(entidad);
+		} else {
+			return ResponseEntity.badRequest()
+					.body("ERROR: No se encontró el sector hijo con los parámetros especificados.");
 		}
 
 		return new ResponseEntity<>("Actualización exitosa.", HttpStatus.OK);

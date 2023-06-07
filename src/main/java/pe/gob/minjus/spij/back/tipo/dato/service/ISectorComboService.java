@@ -12,11 +12,16 @@ public interface ISectorComboService {
 
 	public List<SectorComboEntity> listaSectorHijo();
 
-	public Optional<SectorComboEntity> ConsultarPorNombre(String nombre);
+	public Optional<SectorComboEntity> ConsultarPadrePorNombre(String nombre);
 
-	public Optional<SectorComboEntity> ConsultarPorNombreGrupo(String nombreAnterior, int grupo);
-	
+	public Optional<SectorComboEntity> ConsultarHijoPorNombre(String nombre);
+
+	public Optional<SectorComboEntity> ConsultarPadrePorNombreYGrupo(String nombreAnterior, int grupo);
+
 	public List<SectorComboEntity> listaSectorHijoPorPadre(String nombreAnterior, int grupo);
+
+	public Optional<SectorComboEntity> ConsultarHijoPorNombrePadreYGrupo(String nombreAnterior, String padre_nombre,
+			int grupo);
 
 	public void Guardar(SectorComboEntity sectorComboEntity);
 }
