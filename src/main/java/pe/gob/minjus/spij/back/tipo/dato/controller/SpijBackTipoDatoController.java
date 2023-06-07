@@ -141,8 +141,8 @@ public class SpijBackTipoDatoController {
 		SectorComboEntity padre = new SectorComboEntity();
 		padre.setSector_combo_id(sector_combo_id);
 		padre.setNombre(sectorPadre.nombre.toUpperCase());
-		padre.setEs_padre(sectorPadre.es_padre);
-		padre.setPadre_nombre(sectorPadre.padre_nombre.toUpperCase());
+		padre.setEs_padre(2);
+		padre.setPadre_nombre("");
 
 		int grupo = sectorPadre.grupo;
 		if (grupo >= 1 && grupo <= 8) {
