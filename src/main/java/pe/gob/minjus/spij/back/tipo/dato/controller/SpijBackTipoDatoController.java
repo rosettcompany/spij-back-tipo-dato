@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import pe.gob.minjus.spij.back.tipo.dato.entity.AgrupacionComboEntity;
 import pe.gob.minjus.spij.back.tipo.dato.entity.AgrupamientoNormaEntity;
 import pe.gob.minjus.spij.back.tipo.dato.entity.NormaActualizar;
 import pe.gob.minjus.spij.back.tipo.dato.entity.NormaRequest;
 import pe.gob.minjus.spij.back.tipo.dato.entity.SectorComboEntity;
 import pe.gob.minjus.spij.back.tipo.dato.entity.SectorHijoActualizar;
+import pe.gob.minjus.spij.back.tipo.dato.service.IAgrupacionComboService;
 import pe.gob.minjus.spij.back.tipo.dato.service.IAgrupamientoNormaService;
 import pe.gob.minjus.spij.back.tipo.dato.service.ISectorComboService;
 
@@ -26,14 +28,23 @@ import pe.gob.minjus.spij.back.tipo.dato.service.ISectorComboService;
 @RestController
 @RequestMapping("/api")
 public class SpijBackTipoDatoController {
+	
+	@Autowired
+	private IAgrupacionComboService agrupacionComboService;
 
 	@Autowired
 	private IAgrupamientoNormaService agrupamientoNormaService;
 
 	@Autowired
 	private ISectorComboService sectorComboService;
+	
+	@RequestMapping(value = "/lista-grupos", method = RequestMethod.GET)
+	public ResponseEntity<List<AgrupacionComboEntity>> getGrupos() throws Exception {
+		List<AgrupacionComboEntity> data = agrupacionComboService.findAll();
+		return ResponseEntity.ok(data);
+	}
 
-	@RequestMapping(value = "/listar-normar-y-jurisprudencia", method = RequestMethod.GET)
+	@RequestMapping(value = "/lista-normar-y-jurisprudencia", method = RequestMethod.GET)
 	public ResponseEntity<List<AgrupamientoNormaEntity>> getTodo() throws Exception {
 		List<AgrupamientoNormaEntity> data = agrupamientoNormaService.findAll();
 		return ResponseEntity.ok(data);
