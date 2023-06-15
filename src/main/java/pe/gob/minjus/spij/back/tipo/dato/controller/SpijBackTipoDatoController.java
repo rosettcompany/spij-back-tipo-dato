@@ -232,7 +232,6 @@ public class SpijBackTipoDatoController {
 			
 			// Actualizar nombres de los sectores hijos
 			List<SectorComboEntity> sectoresHijos = sectorComboService.listaSectorHijoPorPadre(nombreAnterior, norma.grupo);
-			LOG.info( sectoresHijos.size());
 	        
 	        for (SectorComboEntity sectorHijo : sectoresHijos) {
 	            sectorHijo.setPadre_nombre(nombreNuevo);
