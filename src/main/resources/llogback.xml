@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration>
+
+<!--
+    Document   : log4j.xml
+    Created on : 18 de junio de 2019, 05:31 PM
+    Author     : dyurivilca
+    Description:
+        Purpose of the document follows.
+-->
+
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%-10thread] %-5level (%logger{2}) %msg - [linea:%line]%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="DAYFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%-10thread] %-5level (%logger{2}) %msg - [linea:%line]%n</pattern>
+        </encoder>
+        <file>${jboss.server.log.dir}/spij-back-tipo-dato.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${jboss.server.log.dir}/spij-back-tipo-dato.%d{yyyyMMdd}</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="java.sql" additivity="false">
+        <level value="debug"/>
+        <appender-ref ref="DAYFILE" />
+    </logger>
+
+    <logger name="org.apache.ibatis" additivity="false">
+        <level value="info"/>
+        <appender-ref ref="DAYFILE" />
+    </logger>
+
+    <logger name="org.mybatis.spring" additivity="false">
+        <level value="info"/>
+        <appender-ref ref="DAYFILE" />
+    </logger>
+
+    <logger name="org.jboss.remoting.transport.Connector" additivity="true">
+        <level value="ERROR"/>
+    </logger>
+
+    <root>
+        <level value="WARN" />
+        <appender-ref ref="DAYFILE" />
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+</configuration>

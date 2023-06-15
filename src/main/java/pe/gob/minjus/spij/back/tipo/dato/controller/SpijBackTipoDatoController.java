@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,8 @@ import pe.gob.minjus.spij.back.tipo.dato.service.ISectorComboService;
 @RestController
 @RequestMapping("/api")
 public class SpijBackTipoDatoController {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(SpijBackTipoDatoController.class);
 	
 	@Autowired
 	private IAgrupacionComboService agrupacionComboService;
@@ -66,11 +70,11 @@ public class SpijBackTipoDatoController {
 	public ResponseEntity<?> insertarNormas(@RequestBody NormaRequest normaRequest) throws ParseException {
 
 		List<AgrupamientoNormaEntity> data = agrupamientoNormaService.findAll();
-		System.out.println("data.size: " + data.size());
+		LOG.info("data.size: " + data.size());
 		int lastIndex = data.size() - 1;
 		AgrupamientoNormaEntity lastEntity = data.get(lastIndex);
 		int agrupamiento_id = lastEntity.getAgrupamiento_id() + 1;
-		System.out.println("lastEntity: " + agrupamiento_id);
+		LOG.info("lastEntity: " + agrupamiento_id);
 
 		AgrupamientoNormaEntity norma = new AgrupamientoNormaEntity();
 		norma.setAgrupamiento_id(agrupamiento_id);
@@ -87,10 +91,10 @@ public class SpijBackTipoDatoController {
 					.body("ERROR: El grupo ingresado no está asociado a una agrupación válida.");
 		}
 
-		System.out.println("norma: " + norma);
-		System.out.println("norma id: " + norma.agrupamiento_id);
-		System.out.println("norma nombre: " + norma.nombre);
-		System.out.println("norma grupo: " + norma.grupo);
+		LOG.info("norma: " + norma);
+		LOG.info("norma id: " + norma.agrupamiento_id);
+		LOG.info("norma nombre: " + norma.nombre);
+		LOG.info("norma grupo: " + norma.grupo);
 
 		agrupamientoNormaService.Guardar(norma);
 		return new ResponseEntity<>("Registro exitoso", HttpStatus.OK);
@@ -111,9 +115,9 @@ public class SpijBackTipoDatoController {
 			int grupoNorma = entidad.getGrupo();
 			entidad.setGrupo(grupoNorma);
 
-			System.out.println("ID: " + entidad.getAgrupamiento_id());
-			System.out.println("Nombre: " + entidad.getNombre());
-			System.out.println("Grupo: " + entidad.getGrupo());
+			LOG.info("ID: " + entidad.getAgrupamiento_id());
+			LOG.info("Nombre: " + entidad.getNombre());
+			LOG.info("Grupo: " + entidad.getGrupo());
 
 			agrupamientoNormaService.Guardar(entidad);
 		} else {
@@ -146,11 +150,11 @@ public class SpijBackTipoDatoController {
 	public ResponseEntity<?> insertarSectorPadre(@RequestBody SectorComboEntity sectorPadre) throws ParseException {
 
 		List<SectorComboEntity> data = sectorComboService.findAll();
-		System.out.println("data.size: " + data.size());
+		LOG.info("data.size: " + data.size());
 		int lastIndex = data.size() - 1;
 		SectorComboEntity lastEntity = data.get(lastIndex);
 		int sector_combo_id = lastEntity.getSector_combo_id() + 1;
-		System.out.println("lastEntity: " + sector_combo_id);
+		LOG.info("lastEntity: " + sector_combo_id);
 
 		SectorComboEntity padre = new SectorComboEntity();
 		padre.setSector_combo_id(sector_combo_id);
@@ -169,12 +173,12 @@ public class SpijBackTipoDatoController {
 					.body("ERROR: El grupo ingresado no está asociado a una agrupación válida.");
 		}
 
-		System.out.println("padre: " + padre);
-		System.out.println("padre sector_combo_id: " + padre.sector_combo_id);
-		System.out.println("padre nombre: " + padre.nombre);
-		System.out.println("padre es_padre: " + padre.es_padre);
-		System.out.println("padre padre_nombre: " + padre.padre_nombre);
-		System.out.println("padre grupo: " + padre.grupo);
+		LOG.info("padre: " + padre);
+		LOG.info("padre sector_combo_id: " + padre.sector_combo_id);
+		LOG.info("padre nombre: " + padre.nombre);
+		LOG.info("padre es_padre: " + padre.es_padre);
+		LOG.info("padre padre_nombre: " + padre.padre_nombre);
+		LOG.info("padre grupo: " + padre.grupo);
 
 		sectorComboService.Guardar(padre);
 		return new ResponseEntity<>("Registro exitoso", HttpStatus.OK);
@@ -228,7 +232,7 @@ public class SpijBackTipoDatoController {
 			
 			// Actualizar nombres de los sectores hijos
 			List<SectorComboEntity> sectoresHijos = sectorComboService.listaSectorHijoPorPadre(nombreAnterior, norma.grupo);
-			System.out.println( sectoresHijos.size());
+			LOG.info( sectoresHijos.size());
 	        
 	        for (SectorComboEntity sectorHijo : sectoresHijos) {
 	            sectorHijo.setPadre_nombre(nombreNuevo);
@@ -257,11 +261,11 @@ public class SpijBackTipoDatoController {
 			SectorComboEntity entidad = data.get();
 			entidad.setNombre(nombreNuevo);
 
-			System.out.println("ID: " + entidad.getSector_combo_id());
-			System.out.println("Nombre: " + entidad.getNombre());
-			System.out.println("Es padre: " + entidad.getEs_padre());
-			System.out.println("padre: " + entidad.getPadre_nombre());
-			System.out.println("Grupo: " + entidad.getGrupo());
+			LOG.info("ID: " + entidad.getSector_combo_id());
+			LOG.info("Nombre: " + entidad.getNombre());
+			LOG.info("Es padre: " + entidad.getEs_padre());
+			LOG.info("padre: " + entidad.getPadre_nombre());
+			LOG.info("Grupo: " + entidad.getGrupo());
 
 			sectorComboService.Guardar(entidad);
 		} else {
