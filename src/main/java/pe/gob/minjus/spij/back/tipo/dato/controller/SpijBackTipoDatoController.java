@@ -160,7 +160,7 @@ public class SpijBackTipoDatoController {
 
 		int grupo = sectorPadre.grupo;
 		if (grupo >= 1 && grupo <= 8) {
-			if (grupo == 5) {
+			if (grupo == 5) {//Gobierno local
 				grupo = 6;
 			}
 			padre.setGrupo(grupo);
