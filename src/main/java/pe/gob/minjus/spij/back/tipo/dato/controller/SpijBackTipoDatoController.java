@@ -112,7 +112,7 @@ public class SpijBackTipoDatoController {
 	@RequestMapping(value = "/sector-padre/insertar", method = RequestMethod.POST)
 	public ResponseEntity<?> insertarSectorPadre(@RequestBody SectorComboEntity sectorPadre) throws ParseException {
 		try {
-			sectorComboService.Guardar(sectorPadre);
+			sectorComboService.GuardarPadre(sectorPadre);
 			return ResponseEntity.ok("Operación exitosa"); // Devuelve respuesta exitosa con mensaje
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -123,31 +123,13 @@ public class SpijBackTipoDatoController {
 	@RequestMapping(value = "/sector-hijo/insertar", method = RequestMethod.POST)
 	public ResponseEntity<?> insertarSectorHijo(@RequestBody SectorComboEntity sectorHijo) throws ParseException {
 
-		Optional<SectorComboEntity> padre = sectorComboService
-				.ConsultarPadrePorNombre(sectorHijo.padre_nombre.toUpperCase());
-		if (padre.isPresent()) {
-			SectorComboEntity padreEntidad = padre.get();
-			List<SectorComboEntity> data = sectorComboService.findAll();
-			int lastIndex = data.size() - 1;
-			SectorComboEntity lastEntity = data.get(lastIndex);
-			int sector_combo_id = lastEntity.getSector_combo_id() + 1;
-
-			SectorComboEntity hijo = new SectorComboEntity();
-			hijo.setSector_combo_id(sector_combo_id);
-			hijo.setNombre(sectorHijo.nombre.toUpperCase());
-			hijo.setEs_padre(1);
-			hijo.setPadre_nombre(sectorHijo.padre_nombre.toUpperCase());
-			hijo.setGrupo(padreEntidad.getGrupo());
-
-			sectorComboService.GuardarHijo(hijo);
-
-			return new ResponseEntity<>("Registro exitoso", HttpStatus.OK);
-
-		} else {
-			return ResponseEntity.badRequest()
-					.body("ERROR: No se encontró un sector padre con el nombre especificado.");
+		try {
+			sectorComboService.GuardarHijo(sectorHijo);
+			return ResponseEntity.ok("Operación exitosa"); // Devuelve respuesta exitosa con mensaje
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error al procesar la solicitud: " + e.getMessage());
 		}
-
 	}
 
 	@RequestMapping(value = "/sector-padre/actualizar", method = RequestMethod.POST)
