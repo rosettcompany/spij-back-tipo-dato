@@ -23,5 +23,7 @@ public interface ISectorComboService {
 	public Optional<SectorComboEntity> ConsultarHijoPorNombrePadreYGrupo(String nombreAnterior, String padre_nombre,
 			int grupo);
 
-	public void Guardar(SectorComboEntity sectorComboEntity);
+	public void GuardarPadre(SectorComboEntity sectorComboEntity);
+	
+	public void GuardarHijo(SectorComboEntity sectorComboEntity);
 }

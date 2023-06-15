@@ -14,7 +14,7 @@ import pe.gob.minjus.spij.back.tipo.dato.service.ISectorComboService;
 
 @Service
 public class SectorComboServiceImpl implements ISectorComboService {
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(SectorComboServiceImpl.class);
 
 	@Autowired
@@ -41,7 +41,7 @@ public class SectorComboServiceImpl implements ISectorComboService {
 	}
 
 	@Override
-	public void Guardar(SectorComboEntity sectorComboEntity) {
+	public void GuardarPadre(SectorComboEntity sectorComboEntity) {
 		try {
 			List<SectorComboEntity> data = (List<SectorComboEntity>) iSectorComboRepository.findAll();
 //			LOG.info("data.size: " + data.size());
@@ -57,32 +57,30 @@ public class SectorComboServiceImpl implements ISectorComboService {
 			padre.setPadre_nombre("");
 
 			int grupo = sectorComboEntity.grupo;
-			
-	        if (grupo >= 1 && grupo <= 8) {
-	            if (grupo == 5) {
-	                grupo = 6;
-	            }
-	            padre.setGrupo(grupo);
-	        } else {
-	            String errorMessage = "El grupo ingresado no está asociado a una agrupación válida.";
+
+			if (grupo >= 1 && grupo <= 8) {
+				if (grupo == 5) {
+					grupo = 6;
+				}
+				padre.setGrupo(grupo);
+			} else {
+				String errorMessage = "El grupo ingresado no está asociado a una agrupación válida.";
 //	            LOG.error(errorMessage);
-	            throw new IllegalArgumentException(errorMessage); // Lanza una excepción en caso de error
-	        }
-	        
+				throw new IllegalArgumentException(errorMessage); // Lanza una excepción en caso de error
+			}
+
 //	        LOG.info("padre: " + padre);
 			LOG.info("padre sector_combo_id: " + padre.sector_combo_id);
 //			LOG.info("padre nombre: " + padre.nombre);
 //			LOG.info("padre es_padre: " + padre.es_padre);
 //			LOG.info("padre padre_nombre: " + padre.padre_nombre);
 //			LOG.info("padre grupo: " + padre.grupo);
-			
-			iSectorComboRepository.save(padre);
-		}catch (Exception e) {
-	        LOG.error("Error al guardar el sector padre: " + e.getMessage());
-	        throw e; // Lanza la excepción al controlador para que pueda manejarla
-	    }
-		
 
+			iSectorComboRepository.save(padre);
+		} catch (Exception e) {
+			LOG.error("Error al guardar el sector padre: " + e.getMessage());
+			throw e; // Lanza la excepción al controlador para que pueda manejarla
+		}
 	}
 
 	@Override
@@ -104,6 +102,37 @@ public class SectorComboServiceImpl implements ISectorComboService {
 	public Optional<SectorComboEntity> ConsultarHijoPorNombrePadreYGrupo(String nombreAnterior, String padre_nombre,
 			int grupo) {
 		return iSectorComboRepository.ConsultarHijoPorNombrePadreYGrupo(nombreAnterior, padre_nombre, grupo);
+	}
+
+	@Override
+	public void GuardarHijo(SectorComboEntity sectorComboEntity) {
+		try {
+			Optional<SectorComboEntity> padre = iSectorComboRepository
+					.ConsultarPadrePorNombre(sectorComboEntity.padre_nombre.toUpperCase());
+			if (padre.isPresent()) {
+				SectorComboEntity padreEntidad = padre.get();
+				List<SectorComboEntity> data = (List<SectorComboEntity>) iSectorComboRepository.findAll();
+				int lastIndex = data.size() - 1;
+				SectorComboEntity lastEntity = data.get(lastIndex);
+				int sector_combo_id = lastEntity.getSector_combo_id() + 1;
+
+				SectorComboEntity hijo = new SectorComboEntity();
+				hijo.setSector_combo_id(sector_combo_id);
+				hijo.setNombre(sectorComboEntity.nombre.toUpperCase());
+				hijo.setEs_padre(1);
+				hijo.setPadre_nombre(sectorComboEntity.padre_nombre.toUpperCase());
+				hijo.setGrupo(padreEntidad.getGrupo());
+
+				iSectorComboRepository.save(hijo);
+			} else {
+				String errorMessage = "No se encontró un sector padre con el nombre especificado.";
+//	            LOG.error(errorMessage);
+				throw new IllegalArgumentException(errorMessage); // Lanza una excepción en caso de error
+			}
+		} catch (Exception e) {
+			LOG.error("Error al guardar el sector hijo: " + e.getMessage());
+			throw e; // Lanza la excepción al controlador para que pueda manejarla
+		}
 	}
 
 }

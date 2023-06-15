@@ -139,7 +139,7 @@ public class SpijBackTipoDatoController {
 			hijo.setPadre_nombre(sectorHijo.padre_nombre.toUpperCase());
 			hijo.setGrupo(padreEntidad.getGrupo());
 
-			sectorComboService.Guardar(hijo);
+			sectorComboService.GuardarHijo(hijo);
 
 			return new ResponseEntity<>("Registro exitoso", HttpStatus.OK);
 

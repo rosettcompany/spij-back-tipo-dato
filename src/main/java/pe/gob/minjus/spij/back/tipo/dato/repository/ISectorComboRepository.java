@@ -22,7 +22,7 @@ public interface ISectorComboRepository extends CrudRepository<SectorComboEntity
 	List<SectorComboEntity> listaSectorHijo();
 
 	@Query(value = "SELECT * FROM spij_ext_sector_combo "
-			+ "WHERE spij_ext_sector_combo.nombre=?1 and pij_ext_sector_combo.es_padre = 2", nativeQuery = true)
+			+ "WHERE spij_ext_sector_combo.nombre=?1 and spij_ext_sector_combo.es_padre = 2", nativeQuery = true)
 	Optional<SectorComboEntity> ConsultarPadrePorNombre(String nombre);
 
 	@Query(value = "SELECT * FROM spij_ext_sector_combo "
