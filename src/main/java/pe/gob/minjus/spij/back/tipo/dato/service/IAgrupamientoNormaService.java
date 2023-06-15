@@ -5,6 +5,7 @@ import java.util.Optional;
 
 
 import pe.gob.minjus.spij.back.tipo.dato.entity.AgrupamientoNormaEntity;
+import pe.gob.minjus.spij.back.tipo.dato.entity.NormaActualizar;
 
 public interface IAgrupamientoNormaService {
 	public List<AgrupamientoNormaEntity> findAll();
@@ -13,4 +14,5 @@ public interface IAgrupamientoNormaService {
 	public Optional<AgrupamientoNormaEntity> ConsultarPorNombre(String nombreAnterior, int grupo);
 	public Optional<AgrupamientoNormaEntity> ConsultarId(int id);
 	public void Guardar(AgrupamientoNormaEntity agrupamientoNormaEntity);
+	public void Actualizar(NormaActualizar agrupamientoNormaEntity);
 }
