@@ -147,27 +147,12 @@ public class SpijBackTipoDatoController {
 	@RequestMapping(value = "/sector-hijo/actualizar", method = RequestMethod.POST)
 	public ResponseEntity<?> actualizarSectorHijo(@RequestBody SectorHijoActualizar hijo) throws ParseException {
 
-		String nombreAnterior = hijo.nombreAnterior.toUpperCase();
-		String nombreNuevo = hijo.nombreNuevo.toUpperCase();
-		String padre_nombre = hijo.padre_nombre.toUpperCase();
-		Optional<SectorComboEntity> data = sectorComboService.ConsultarHijoPorNombrePadreYGrupo(nombreAnterior,
-				padre_nombre, hijo.grupo);
-		if (data.isPresent()) {
-			SectorComboEntity entidad = data.get();
-			entidad.setNombre(nombreNuevo);
-
-			LOG.info("ID: " + entidad.getSector_combo_id());
-			LOG.info("Nombre: " + entidad.getNombre());
-			LOG.info("Es padre: " + entidad.getEs_padre());
-			LOG.info("padre: " + entidad.getPadre_nombre());
-			LOG.info("Grupo: " + entidad.getGrupo());
-
-			sectorComboService.Guardar(entidad);
-		} else {
-			return ResponseEntity.badRequest()
-					.body("ERROR: No se encontró el sector hijo con los parámetros especificados.");
+		try {
+			sectorComboService.ActualizarHijo(hijo);
+			return ResponseEntity.ok("Operación exitosa"); // Devuelve respuesta exitosa con mensaje
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error al procesar la solicitud: " + e.getMessage());
 		}
-
-		return new ResponseEntity<>("Actualización exitosa.", HttpStatus.OK);
 	}
 }

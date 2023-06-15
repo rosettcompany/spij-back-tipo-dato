@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import pe.gob.minjus.spij.back.tipo.dato.entity.AgrupamientoNormaEntity;
 import pe.gob.minjus.spij.back.tipo.dato.entity.NormaActualizar;
 import pe.gob.minjus.spij.back.tipo.dato.entity.SectorComboEntity;
+import pe.gob.minjus.spij.back.tipo.dato.entity.SectorHijoActualizar;
 import pe.gob.minjus.spij.back.tipo.dato.repository.ISectorComboRepository;
 import pe.gob.minjus.spij.back.tipo.dato.service.ISectorComboService;
 
@@ -175,13 +176,39 @@ public class SectorComboServiceImpl implements ISectorComboService {
 	        LOG.error("Error al actualizar el sector: " + e.getMessage());
 	        throw e; // Lanza la excepción al controlador para que pueda manejarla
 	    }
-		
 	}
 
 	@Override
-	public void ActualizarHijo(NormaActualizar sectorComboEntity) {
-		// TODO Auto-generated method stub
-		
+	public void ActualizarHijo(SectorHijoActualizar hijo) {
+		try {
+			String nombreAnterior = hijo.nombreAnterior.toUpperCase();
+			String nombreNuevo = hijo.nombreNuevo.toUpperCase();
+			String padre_nombre = hijo.padre_nombre.toUpperCase();
+			Optional<SectorComboEntity> data = iSectorComboRepository.ConsultarHijoPorNombrePadreYGrupo(nombreAnterior,
+					padre_nombre, hijo.grupo);
+			if (data.isPresent()) {
+				SectorComboEntity entidad = data.get();
+				entidad.setNombre(nombreNuevo);
+
+				LOG.info("ID: " + entidad.getSector_combo_id());
+				LOG.info("Nombre: " + entidad.getNombre());
+				LOG.info("Es padre: " + entidad.getEs_padre());
+				LOG.info("padre: " + entidad.getPadre_nombre());
+				LOG.info("Grupo: " + entidad.getGrupo());
+
+				iSectorComboRepository.save(entidad);
+				
+			} else {
+	            String errorMessage = "No se encontró el sector hijo con los parámetros especificados.";
+//	            LOG.error(errorMessage);
+	            throw new IllegalArgumentException(errorMessage); // Lanza una excepción en caso de error
+	        }
+
+	        
+	    } catch (Exception e) {
+	        LOG.error("Error al actualizar el sector: " + e.getMessage());
+	        throw e; // Lanza la excepción al controlador para que pueda manejarla
+	    }
 	}
 
 }

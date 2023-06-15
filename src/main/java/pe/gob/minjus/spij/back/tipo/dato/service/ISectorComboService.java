@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import pe.gob.minjus.spij.back.tipo.dato.entity.NormaActualizar;
 import pe.gob.minjus.spij.back.tipo.dato.entity.SectorComboEntity;
+import pe.gob.minjus.spij.back.tipo.dato.entity.SectorHijoActualizar;
 
 public interface ISectorComboService {
 	public List<SectorComboEntity> findAll();
@@ -30,5 +31,5 @@ public interface ISectorComboService {
 	
 public void ActualizarPadre(NormaActualizar sectorComboEntity);
 	
-	public void ActualizarHijo(NormaActualizar sectorComboEntity);
+	public void ActualizarHijo(SectorHijoActualizar sectorComboEntity);
 }
