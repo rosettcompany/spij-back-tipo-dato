@@ -111,40 +111,13 @@ public class SpijBackTipoDatoController {
 
 	@RequestMapping(value = "/sector-padre/insertar", method = RequestMethod.POST)
 	public ResponseEntity<?> insertarSectorPadre(@RequestBody SectorComboEntity sectorPadre) throws ParseException {
-
-		List<SectorComboEntity> data = sectorComboService.findAll();
-		LOG.info("data.size: " + data.size());
-		int lastIndex = data.size() - 1;
-		SectorComboEntity lastEntity = data.get(lastIndex);
-		int sector_combo_id = lastEntity.getSector_combo_id() + 1;
-		LOG.info("lastEntity: " + sector_combo_id);
-
-		SectorComboEntity padre = new SectorComboEntity();
-		padre.setSector_combo_id(sector_combo_id);
-		padre.setNombre(sectorPadre.nombre.toUpperCase());
-		padre.setEs_padre(2);
-		padre.setPadre_nombre("");
-
-		int grupo = sectorPadre.grupo;
-		if (grupo >= 1 && grupo <= 8) {
-			if (grupo == 5) {// Gobierno local
-				grupo = 6;
-			}
-			padre.setGrupo(grupo);
-		} else {
-			return ResponseEntity.badRequest()
-					.body("ERROR: El grupo ingresado no está asociado a una agrupación válida.");
+		try {
+			sectorComboService.Guardar(sectorPadre);
+			return ResponseEntity.ok("Operación exitosa"); // Devuelve respuesta exitosa con mensaje
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error al procesar la solicitud: " + e.getMessage());
 		}
-
-		LOG.info("padre: " + padre);
-		LOG.info("padre sector_combo_id: " + padre.sector_combo_id);
-		LOG.info("padre nombre: " + padre.nombre);
-		LOG.info("padre es_padre: " + padre.es_padre);
-		LOG.info("padre padre_nombre: " + padre.padre_nombre);
-		LOG.info("padre grupo: " + padre.grupo);
-
-		sectorComboService.Guardar(padre);
-		return new ResponseEntity<>("Registro exitoso", HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/sector-hijo/insertar", method = RequestMethod.POST)
