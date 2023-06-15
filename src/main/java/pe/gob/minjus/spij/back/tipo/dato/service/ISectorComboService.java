@@ -3,6 +3,7 @@ package pe.gob.minjus.spij.back.tipo.dato.service;
 import java.util.List;
 import java.util.Optional;
 
+import pe.gob.minjus.spij.back.tipo.dato.entity.NormaActualizar;
 import pe.gob.minjus.spij.back.tipo.dato.entity.SectorComboEntity;
 
 public interface ISectorComboService {
@@ -26,4 +27,8 @@ public interface ISectorComboService {
 	public void GuardarPadre(SectorComboEntity sectorComboEntity);
 	
 	public void GuardarHijo(SectorComboEntity sectorComboEntity);
+	
+public void ActualizarPadre(NormaActualizar sectorComboEntity);
+	
+	public void ActualizarHijo(NormaActualizar sectorComboEntity);
 }

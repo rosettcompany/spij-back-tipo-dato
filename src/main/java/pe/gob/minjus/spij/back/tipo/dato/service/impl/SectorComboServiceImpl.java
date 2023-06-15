@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import pe.gob.minjus.spij.back.tipo.dato.entity.AgrupamientoNormaEntity;
+import pe.gob.minjus.spij.back.tipo.dato.entity.NormaActualizar;
 import pe.gob.minjus.spij.back.tipo.dato.entity.SectorComboEntity;
 import pe.gob.minjus.spij.back.tipo.dato.repository.ISectorComboRepository;
 import pe.gob.minjus.spij.back.tipo.dato.service.ISectorComboService;
@@ -133,6 +135,53 @@ public class SectorComboServiceImpl implements ISectorComboService {
 			LOG.error("Error al guardar el sector hijo: " + e.getMessage());
 			throw e; // Lanza la excepción al controlador para que pueda manejarla
 		}
+	}
+
+	@Override
+	public void ActualizarPadre(NormaActualizar sectorComboEntity) {
+		try {
+			String nombreAnterior = sectorComboEntity.nombreAnterior.toUpperCase();
+			String nombreNuevo = sectorComboEntity.nombreNuevo.toUpperCase();
+
+			Optional<SectorComboEntity> padreB = iSectorComboRepository.ConsultarPadrePorNombreYGrupo(nombreAnterior,
+					sectorComboEntity.grupo);
+			if (padreB.isPresent()) {
+				SectorComboEntity padre = padreB.get();
+				int agrupamiento_id = padre.getSector_combo_id();
+				padre.setSector_combo_id(agrupamiento_id);
+				padre.setNombre(nombreNuevo);
+				int grupoNorma = padre.getGrupo();
+				padre.setGrupo(grupoNorma);
+				
+				// Actualizar nombres de los sectores hijos
+				List<SectorComboEntity> sectoresHijos = iSectorComboRepository.listaSectorHijoPorPadre(nombreAnterior,
+						sectorComboEntity.grupo);
+
+				for (SectorComboEntity sectorHijo : sectoresHijos) {
+					sectorHijo.setPadre_nombre(nombreNuevo);
+					iSectorComboRepository.save(sectorHijo);
+				}
+
+				iSectorComboRepository.save(padre);
+				
+			} else {
+	            String errorMessage = "No se encontró el sector padre con el nombre y/o grupo especificado.";
+//	            LOG.error(errorMessage);
+	            throw new IllegalArgumentException(errorMessage); // Lanza una excepción en caso de error
+	        }
+
+	        
+	    } catch (Exception e) {
+	        LOG.error("Error al actualizar el sector: " + e.getMessage());
+	        throw e; // Lanza la excepción al controlador para que pueda manejarla
+	    }
+		
+	}
+
+	@Override
+	public void ActualizarHijo(NormaActualizar sectorComboEntity) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

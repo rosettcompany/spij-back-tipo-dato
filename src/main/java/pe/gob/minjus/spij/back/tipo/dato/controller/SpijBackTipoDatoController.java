@@ -135,37 +135,13 @@ public class SpijBackTipoDatoController {
 	@RequestMapping(value = "/sector-padre/actualizar", method = RequestMethod.POST)
 	public ResponseEntity<?> actualizarSectorPadre(@RequestBody NormaActualizar norma) throws ParseException {
 
-		String nombreAnterior = norma.nombreAnterior.toUpperCase();
-		String nombreNuevo = norma.nombreNuevo.toUpperCase();
-
-		Optional<SectorComboEntity> padreB = sectorComboService.ConsultarPadrePorNombreYGrupo(nombreAnterior,
-				norma.grupo);
-
-		if (padreB.isPresent()) {
-			SectorComboEntity padre = padreB.get();
-			int agrupamiento_id = padre.getSector_combo_id();
-			padre.setSector_combo_id(agrupamiento_id);
-			padre.setNombre(nombreNuevo);
-			int grupoNorma = padre.getGrupo();
-			padre.setGrupo(grupoNorma);
-
-			// Actualizar nombres de los sectores hijos
-			List<SectorComboEntity> sectoresHijos = sectorComboService.listaSectorHijoPorPadre(nombreAnterior,
-					norma.grupo);
-
-			for (SectorComboEntity sectorHijo : sectoresHijos) {
-				sectorHijo.setPadre_nombre(nombreNuevo);
-				sectorComboService.Guardar(sectorHijo);
-			}
-
-			sectorComboService.Guardar(padre);
-
-		} else {
-			return ResponseEntity.badRequest()
-					.body("ERROR: No se encontró el sector padre con el nombre y/o grupo especificado.");
+		try {
+			sectorComboService.ActualizarPadre(norma);
+			return ResponseEntity.ok("Operación exitosa"); // Devuelve respuesta exitosa con mensaje
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error al procesar la solicitud: " + e.getMessage());
 		}
-
-		return new ResponseEntity<>("Actualización exitosa.", HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/sector-hijo/actualizar", method = RequestMethod.POST)
