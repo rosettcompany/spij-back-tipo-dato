@@ -67,37 +67,14 @@ public class SpijBackTipoDatoController {
 	}
 
 	@RequestMapping(value = "/normas/insertar", method = RequestMethod.POST)
-	public ResponseEntity<?> insertarNormas(@RequestBody NormaRequest normaRequest) throws ParseException {
+	public ResponseEntity<?> insertarNormas(@RequestBody AgrupamientoNormaEntity normaRequest) throws ParseException {
 
-		List<AgrupamientoNormaEntity> data = agrupamientoNormaService.findAll();
-		LOG.info("data.size: " + data.size());
-		int lastIndex = data.size() - 1;
-		AgrupamientoNormaEntity lastEntity = data.get(lastIndex);
-		int agrupamiento_id = lastEntity.getAgrupamiento_id() + 1;
-		LOG.info("lastEntity: " + agrupamiento_id);
-
-		AgrupamientoNormaEntity norma = new AgrupamientoNormaEntity();
-		norma.setAgrupamiento_id(agrupamiento_id);
-		norma.setNombre(normaRequest.nombre.toUpperCase());
-
-		int grupo = normaRequest.grupo;
-		if (grupo >= 1 && grupo <= 8) {
-			if (grupo == 5) {
-				grupo = 6;
-			}
-			norma.setGrupo(grupo);
-		} else {
-			return ResponseEntity.badRequest()
-					.body("ERROR: El grupo ingresado no está asociado a una agrupación válida.");
-		}
-
-		LOG.info("norma: " + norma);
-		LOG.info("norma id: " + norma.agrupamiento_id);
-		LOG.info("norma nombre: " + norma.nombre);
-		LOG.info("norma grupo: " + norma.grupo);
-
-		agrupamientoNormaService.Guardar(norma);
-		return new ResponseEntity<>("Registro exitoso", HttpStatus.OK);
+		try {
+	        agrupamientoNormaService.Guardar(normaRequest);
+	        return ResponseEntity.ok("Operación exitosa"); // Devuelve respuesta exitosa con mensaje
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar la solicitud: " + e.getMessage());
+	    }
 	}
 
 	@RequestMapping(value = "/norma/actualizar", method = RequestMethod.POST)

@@ -3,7 +3,10 @@ package pe.gob.minjus.spij.back.tipo.dato.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import pe.gob.minjus.spij.back.tipo.dato.entity.AgrupamientoNormaEntity;
@@ -12,6 +15,8 @@ import pe.gob.minjus.spij.back.tipo.dato.service.IAgrupamientoNormaService;
 
 @Service
 public class AgrupamientoNormaServiceImpl implements IAgrupamientoNormaService {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(AgrupamientoNormaServiceImpl.class);
 	
 	@Autowired
 	private IAgrupamientoNormaRepository iAgrupamientoNormaRepository;
@@ -41,9 +46,42 @@ public class AgrupamientoNormaServiceImpl implements IAgrupamientoNormaService {
 
 	@Override
 	public void Guardar(AgrupamientoNormaEntity agrupamientoNormaEntity) {
-		iAgrupamientoNormaRepository.save(agrupamientoNormaEntity);
-		
+	    try {
+	        List<AgrupamientoNormaEntity> data = (List<AgrupamientoNormaEntity>) iAgrupamientoNormaRepository.findAll();
+	        LOG.info("data.size: " + data.size());
+	        int lastIndex = data.size() - 1;
+	        AgrupamientoNormaEntity lastEntity = data.get(lastIndex);
+	        int agrupamiento_id = lastEntity.getAgrupamiento_id() + 1;
+	        LOG.info("lastEntity: " + agrupamiento_id);
+
+	        AgrupamientoNormaEntity norma = new AgrupamientoNormaEntity();
+	        norma.setAgrupamiento_id(agrupamiento_id);
+	        norma.setNombre(agrupamientoNormaEntity.nombre.toUpperCase());
+
+	        int grupo = agrupamientoNormaEntity.grupo;
+	        if (grupo >= 1 && grupo <= 8) {
+	            if (grupo == 5) {
+	                grupo = 6;
+	            }
+	            norma.setGrupo(grupo);
+	        } else {
+	            String errorMessage = "El grupo ingresado no está asociado a una agrupación válida.";
+//	            LOG.error(errorMessage);
+	            throw new IllegalArgumentException(errorMessage); // Lanza una excepción en caso de error
+	        }
+
+	        LOG.info("norma: " + norma);
+	        LOG.info("norma id: " + norma.agrupamiento_id);
+	        LOG.info("norma nombre: " + norma.nombre);
+	        LOG.info("norma grupo: " + norma.grupo);
+
+	        iAgrupamientoNormaRepository.save(norma);
+	    } catch (Exception e) {
+	        LOG.error("Error al guardar la norma: " + e.getMessage());
+	        throw e; // Lanza la excepción al controlador para que pueda manejarla
+	    }
 	}
+
 
 
 	@Override
