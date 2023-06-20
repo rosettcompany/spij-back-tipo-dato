@@ -7,9 +7,10 @@ import pe.gob.minjus.spij.back.tipo.dato.entity.NormaActualizar;
 import pe.gob.minjus.spij.back.tipo.dato.entity.SectorComboEntity;
 import pe.gob.minjus.spij.back.tipo.dato.entity.SectorHijoActualizar;
 
+
 public interface ISectorComboService {
 	public List<SectorComboEntity> findAll();
-
+ 
 	public List<SectorComboEntity> listaSectorPadre();
 
 	public List<SectorComboEntity> listaSectorHijo();
