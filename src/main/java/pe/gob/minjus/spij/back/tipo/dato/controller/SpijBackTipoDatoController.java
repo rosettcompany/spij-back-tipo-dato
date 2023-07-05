@@ -46,7 +46,7 @@ public class SpijBackTipoDatoController {
 		return ResponseEntity.ok(data);
 	}
 
-	@RequestMapping(value = "/lista-normar-y-jurisprudencia", method = RequestMethod.GET)
+	@RequestMapping(value = "/lista-normas-y-jurisprudencias", method = RequestMethod.GET)
 	public ResponseEntity<List<AgrupamientoNormaEntity>> getTodo() throws Exception {
 		List<AgrupamientoNormaEntity> data = agrupamientoNormaService.findAll();
 		return ResponseEntity.ok(data);
